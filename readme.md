@@ -1,5 +1,10 @@
-Installation:
+# Consensys Assessment - Lucas Yamamoto
 
-npm i -g truffle
-truffle compile
-truffle migrate
+## Install Truffle
+
+### `npm i -g truffle`
+
+## Compile and deploy
+
+### `truffle compile`
+### `truffle migrate`
