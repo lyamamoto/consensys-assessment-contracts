@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-interface ERC721 {
-    function safeTransferFrom(address _from, address _to, uint256 _tokenId) external payable;
-}
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-contract LendingAndBorrowing {
+contract LendingAndBorrowing is IERC721Receiver {
 
     // For simplicity users can only lend eth
     mapping(address => uint) ethBalance;
@@ -16,6 +15,10 @@ contract LendingAndBorrowing {
     mapping(address => uint) borrowCapacity;
 
     constructor() {}
+
+    function onERC721Received(address, address, uint256, bytes calldata) external pure returns (bytes4) {
+        return IERC721Receiver.onERC721Received.selector;
+    }
 
     // For simplicity everytime the user lends he will gain 5% of the lended amount as reward
     function lend() public payable {
@@ -72,8 +75,7 @@ contract LendingAndBorrowing {
 
     // For simplicity each NFT will increase user's borrow capacity by 1e18
     function deposit(address nftAddress, uint tokenId) public {
-        ERC721 nftContract = ERC721(nftAddress);
-        nftContract.safeTransferFrom(msg.sender, address(this), tokenId);
+        IERC721(nftAddress).safeTransferFrom(msg.sender, address(this), tokenId);
         nftOwners[nftAddress][tokenId] = msg.sender;
 
         uint senderBorrowCapacity = borrowCapacity[msg.sender];
@@ -90,8 +92,7 @@ contract LendingAndBorrowing {
         borrowCapacity[msg.sender] -= 10 ** 18;
 
         require(nftOwners[nftAddress][tokenId] == msg.sender, "Sender isn't NFT owner");
-        ERC721 nftContract = ERC721(nftAddress);
-        nftContract.safeTransferFrom(address(this), msg.sender, tokenId);
+        IERC721(nftAddress).safeTransferFrom(address(this), msg.sender, tokenId);
         nftOwners[nftAddress][tokenId] = address(0);
     }
 
