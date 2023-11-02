@@ -95,6 +95,7 @@ contract LendingAndBorrowing {
         nftOwners[nftAddress][tokenId] = address(0);
     }
 
+    function isCollateralized(address nftAddress, uint tokenId) public view returns(bool) { return nftOwners[nftAddress][tokenId] == msg.sender; }
     function myBalance() public view returns(uint) { return ethBalance[msg.sender]; }
     function myDebt() public view returns(uint) { return debt[msg.sender]; }
     function myBorrowCapacity() public view returns(uint) { return borrowCapacity[msg.sender]; }
