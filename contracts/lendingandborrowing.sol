@@ -86,7 +86,7 @@ contract LendingAndBorrowing is IERC721Receiver {
     function withdrawCollateral(address nftAddress, uint tokenId) public {
         uint senderDebt = debt[msg.sender];
         uint senderBorrowCapacity = borrowCapacity[msg.sender];
-        require(senderBorrowCapacity - senderDebt > 10 ** 18, "Debt must be paid before collateral withdraw");
+        require(senderBorrowCapacity - senderDebt >= 10 ** 18, "Debt must be paid before collateral withdraw");
 
         require(senderBorrowCapacity - 10 ** 18 < senderBorrowCapacity, "Overflow");
         borrowCapacity[msg.sender] -= 10 ** 18;
