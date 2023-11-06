@@ -1,4 +1,4 @@
-# Consensys Assessment - Lucas Yamamoto
+# Lending & Borrowing Contract (using NFT as collateral)
 
 ## Install Truffle
 
